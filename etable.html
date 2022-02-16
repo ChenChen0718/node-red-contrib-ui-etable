@@ -45,6 +45,21 @@
         <input type="text" id="node-input-payload" style="width:70%">
         <input type="hidden" id="node-input-payloadType">
     </div>
+    <div class="form-row">
+        <label for="node-input-theme"><i class="fa fa-envelope"></i> <span data-i18n="common.label.payload"></span>Theme</label>
+        <select type="text" id="node-input-theme">
+            <option value="tabulator.min.css">default</option> 
+            <option value="tabulator_site.min.css">site</option> 
+            <option value="tabulator_simple.min.css">simple</option> 
+            <option value="tabulator_semanticui.min.css">semanticui</option>
+            <option value="tabulator_modern.min.css">modern</option> 
+            <option value="tabulator_midnight.min.css">midnight</option> 
+            <option value="tabulator_materialize.min.css">materialize</option> 
+            <option value="tabulator_bulma.min.css">bulma</option> 
+            <option value="tabulator_bootstrap4.min.css">bootstrap4</option> 
+            <option value="tabulator_bootstrap3.min.css">bootstrap3</option> 
+        </select>  
+    </div>
 </script>
 
 <script type='text/javascript'>
@@ -55,7 +70,7 @@
             payload: {value:"{}", validate: RED.validators.typedInput("payloadType")},
             payloadType: {value:"json"},
             options: {value:"{}", validate: RED.validators.typedInput("payloadType")},
-
+            theme: {value: "tabulator.min.css"},
             group: { type: 'ui_group', required: true },
             name: { value: '' },
             order: { value: 0 },
@@ -106,7 +121,7 @@
             });
 
             $("#node-input-payloadType").val(this.payloadType);
-
+            $("#node-input-theme").val(this.theme);
             $("#node-input-payload").typedInput({
                 default: 'json',
                 typeField: $("#node-input-payloadType"),

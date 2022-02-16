@@ -27,11 +27,10 @@ module.exports = function (RED) {
         }
     }
 
-    function HTML(config,dark) {
+    function HTML(config) {
         var configAsJson = JSON.stringify(config);
-        var mid = (dark) ? "_midnight" : "";
         var html = String.raw`
-                <link href='ui-etable/css/tabulator`+mid+`.min.css' rel='stylesheet' type='text/css'>
+                <link href='ui-etable/css/`+ config.theme +`' rel='stylesheet' type='text/css'>
                 <script type='text/javascript' src='ui-etable/js/tabulator.js'></script>
                 <div id='ui_etable-{{$id}}'></div>
                 <input type='hidden' ng-init='init(` + configAsJson + `)'>
@@ -47,18 +46,18 @@ module.exports = function (RED) {
             if (checkConfig(node, config)) {
                 var ui = RED.require('node-red-dashboard')(RED);
 
-                var luma = 255;
-                if (ui.hasOwnProperty("getTheme") && (ui.getTheme() !== undefined)) {
-                    var rgb = parseInt(ui.getTheme()["page-sidebar-backgroundColor"].value.substring(1), 16);   // convert rrggbb to decimal
-                    luma = 0.2126 * ((rgb >> 16) & 0xff) + 0.7152 * ((rgb >>  8) & 0xff) + 0.0722 * ((rgb >>  0) & 0xff); // per ITU-R BT.709
-                }
+                // var luma = 255;
+                // if (ui.hasOwnProperty("getTheme") && (ui.getTheme() !== undefined)) {
+                //     var rgb = parseInt(ui.getTheme()["page-sidebar-backgroundColor"].value.substring(1), 16);   // convert rrggbb to decimal
+                //     luma = 0.2126 * ((rgb >> 16) & 0xff) + 0.7152 * ((rgb >>  8) & 0xff) + 0.0722 * ((rgb >>  0) & 0xff); // per ITU-R BT.709
+                // }
                 if (config.height == 0) { config.height = 20; } // min height to 2 so auto will show something
 
                 config.columns = JSON.parse(config.payload);
                 delete config.payload;
                 delete config.payloadType;
                 config.options = JSON.parse(config.options);
-                var html = HTML(config,(luma < 128));
+                var html = HTML(config);
 
                 done = ui.addWidget({
                     node: node,
