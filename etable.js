@@ -45,7 +45,6 @@ module.exports = function (RED) {
             RED.nodes.createNode(this, config);
             if (checkConfig(node, config)) {
                 var ui = RED.require('node-red-dashboard')(RED);
-
                 // var luma = 255;
                 // if (ui.hasOwnProperty("getTheme") && (ui.getTheme() !== undefined)) {
                 //     var rgb = parseInt(ui.getTheme()["page-sidebar-backgroundColor"].value.substring(1), 16);   // convert rrggbb to decimal
@@ -93,15 +92,12 @@ module.exports = function (RED) {
                                 height: tabledata.length * y + 26
                             }
                             var opts = Object.assign(opts1,options);
-                            if (outputs > 0) {
-                                opts.cellClick  = function(e,cell) {
-                                    $scope.send({topic:cell.getField(),callback:"cellClick",payload:cell.getData(),options:opts});
-                                };
-                                opts.cellEdited = function(cell) {
-                                    $scope.send({topic:cell.getField(),callback:"cellEdited",payload:cell.getData(),options:opts});
-                                };
-                            }
                             var table = new Tabulator(basediv, opts);
+                            if (outputs > 0) {
+                                table.on("cellEdited", function(cell){
+                                    $scope.send({topic:cell.getField(),callback:"cellEdited",payload:cell.getData(),options:opts});
+                                });
+                            }
                         };
                         $scope.init = function (config) {
                             $scope.config = config;
